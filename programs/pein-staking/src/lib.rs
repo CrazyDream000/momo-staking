@@ -71,7 +71,7 @@ mod pein_staking {
         )?;
 
         Ok(())
-    }
+    }       
 
     pub fn deposit_reward_token(ctx: Context<DepositRewardToken>, amount: u64) -> Result<()> {
         if ctx.accounts.signer.key() != ctx.accounts.staking_info.owner {
