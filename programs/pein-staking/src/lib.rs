@@ -108,6 +108,16 @@ mod pein_staking {
 
 
 
+        let clock = Clock::get()?;
+        let cur_time = clock.unix_timestamp as u64;
+
+
+        user_stake_info.amount[index] = user_stake_info.amount[index] + amount;
+        user_stake_info.staked_time[index] = cur_time;
+        user_stake_info.claimed_time[index] = cur_time;
+
+        staking_info.total_staked += amount;
+
         Ok(())
     }
 
