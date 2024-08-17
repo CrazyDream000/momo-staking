@@ -111,6 +111,16 @@ mod pein_staking {
         let clock = Clock::get()?;
         let cur_time = clock.unix_timestamp as u64;
 
+        if user_stake_info.amount[index] > 0 {
+            let locked_period = cur_time - user_stake_info.claimed_time[index];
+            user_stake_info.pending_reward[index] = get_reward(
+                user_stake_info.amount[index],
+                locked_period,
+                staking_info.lock_period[index],
+                staking_info.reward_rate[index],
+                user_stake_info.pending_reward[index],
+            );
+        }
 
         user_stake_info.amount[index] = user_stake_info.amount[index] + amount;
         user_stake_info.staked_time[index] = cur_time;
