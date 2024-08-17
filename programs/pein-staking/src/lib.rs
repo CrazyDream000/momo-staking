@@ -231,6 +231,26 @@ pub struct Initialize<'info> {
 }
 
 #[derive(Accounts)]
+pub struct WithdrawRewardtoken<'info> {
+    #[account(mut, seeds = [b"staking_info"], bump = staking_info.bump)]
+    pub staking_info: Account<'info, StakingInfo>,
+    #[account(mut)]
+    pub reward_token_mint: Account<'info, Mint>,
+    #[account(mut, seeds = [b"reward_token_vaults", reward_token_mint.key().as_ref()], bump = staking_info.reward_vaults_bump)]
+    pub reward_token_vaults: Account<'info, TokenAccount>,
+
+    #[account(mut, token::mint = staking_info.reward_token_mint)]
+    pub recipient_token: Account<'info, TokenAccount>,
+
+    #[account(mut)]
+    pub signer: Signer<'info>,
+
+    pub token_program: Program<'info, Token>,
+}
+
+
+
+#[derive(Accounts)]
 pub struct Unstake<'info> {
     #[account(mut, seeds = [b"staking_info"], bump = staking_info.bump)]
     pub staking_info: Account<'info, StakingInfo>,
