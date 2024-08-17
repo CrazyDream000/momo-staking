@@ -106,7 +106,17 @@ mod pein_staking {
         let user_stake_info = &mut ctx.accounts.user_stake_info;
         let staking_info = &mut ctx.accounts.staking_info;
 
-
+        token::transfer(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.sender_token.to_account_info(),
+                    to: ctx.accounts.staking_token_vaults.to_account_info(),
+                    authority: ctx.accounts.signer.to_account_info(),
+                },
+            ),
+            amount,
+        )?;
 
         let clock = Clock::get()?;
         let cur_time = clock.unix_timestamp as u64;
