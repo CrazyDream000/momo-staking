@@ -194,13 +194,23 @@ mod pein_staking {
             CpiContext::new_with_signer(
                 ctx.accounts.token_program.to_account_info(),
                 Transfer {
+                    from: ctx.accounts.reward_token_vaults.to_account_info(),
+                    to: ctx.accounts.recipient_reward_token.to_account_info(),
+                    authority: ctx.accounts.reward_token_vaults.to_account_info(),
+                },
+                &[&[
+                    b"reward_token_vaults",
+                    ctx.accounts.staking_info.reward_token_mint.as_ref(),
+                    &[ctx.accounts.staking_info.reward_vaults_bump],
+                ]],
+            ),
             reward_amount,
         )?;
 
         Ok(())
     }
 }
-
+             
 #[derive(Accounts)]
 pub struct Initialize<'info> {
     #[account(init, payer = signer, seeds = [b"staking_info"], bump, space = 10000)]
