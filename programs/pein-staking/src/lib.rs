@@ -171,7 +171,24 @@ mod pein_staking {
         user_stake_info.amount[index] = 0;
         user_stake_info.claimed_amount[index] += reward_amount;
         user_stake_info.claimed_time[index] = cur_time;
+        user_stake_info.staked_time[index] = 0;
+        user_stake_info.pending_reward[index] = 0;
 
+        token::transfer(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from: ctx.accounts.staking_token_vaults.to_account_info(),
+                    to: ctx.accounts.recipient_staking_token.to_account_info(),
+                    authority: ctx.accounts.staking_token_vaults.to_account_info(),
+                },
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+            reward_amount,
+        )?;
+
+        Ok(())
+    }
 }
 
 #[derive(Accounts)]
