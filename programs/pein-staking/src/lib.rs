@@ -156,60 +156,6 @@ mod pein_staking {
         let reward_amount: u64 = get_reward(
             user_stake_info.amount[index],
             reward_period,
-            staking_info.lock_period[index],
-            staking_info.reward_rate[index],
-            user_stake_info.pending_reward[index],
-        );
-        let staked_amount = user_stake_info.amount[index];
-
-        if ctx.accounts.reward_token_vaults.amount < reward_amount {
-            return err!(StakingError::InsufficientBalance);
-        }
-
-        staking_info.total_staked -= user_stake_info.amount[index];
-
-        user_stake_info.amount[index] = 0;
-        user_stake_info.claimed_amount[index] += reward_amount;
-        user_stake_info.claimed_time[index] = cur_time;
-        user_stake_info.staked_time[index] = 0;
-        user_stake_info.pending_reward[index] = 0;
-
-        token::transfer(
-            CpiContext::new_with_signer(
-                ctx.accounts.token_program.to_account_info(),
-                Transfer {
-                    from: ctx.accounts.staking_token_vaults.to_account_info(),
-                    to: ctx.accounts.recipient_staking_token.to_account_info(),
-                    authority: ctx.accounts.staking_token_vaults.to_account_info(),
-                },
-                &[&[
-                    b"staking_token_vaults",
-                    ctx.accounts.staking_info.staking_token_mint.as_ref(),
-                    &[ctx.accounts.staking_info.staking_vaults_bump],
-                ]],
-            ),
-            staked_amount,
-        )?;
-        token::transfer(
-            CpiContext::new_with_signer(
-                ctx.accounts.token_program.to_account_info(),
-                Transfer {
-                    from: ctx.accounts.reward_token_vaults.to_account_info(),
-                    to: ctx.accounts.recipient_reward_token.to_account_info(),
-                    authority: ctx.accounts.reward_token_vaults.to_account_info(),
-                },
-                &[&[
-                    b"reward_token_vaults",
-                    ctx.accounts.staking_info.reward_token_mint.as_ref(),
-                    &[ctx.accounts.staking_info.reward_vaults_bump],
-                ]],
-            ),
-            reward_amount,
-        )?;
-
-        Ok(())
-    }
-}
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
