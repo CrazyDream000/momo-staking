@@ -182,6 +182,16 @@ mod pein_staking {
                     to: ctx.accounts.recipient_staking_token.to_account_info(),
                     authority: ctx.accounts.staking_token_vaults.to_account_info(),
                 },
+                &[&[
+                    b"staking_token_vaults",
+                    ctx.accounts.staking_info.staking_token_mint.as_ref(),
+                    &[ctx.accounts.staking_info.staking_vaults_bump],
+                ]],
+            ),
+            staked_amount,
+        )?;
+        token::transfer(
+            CpiContext::new_with_signer(
                 ctx.accounts.token_program.to_account_info(),
                 Transfer {
             reward_amount,
