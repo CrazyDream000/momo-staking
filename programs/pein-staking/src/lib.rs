@@ -156,6 +156,23 @@ mod pein_staking {
         let reward_amount: u64 = get_reward(
             user_stake_info.amount[index],
             reward_period,
+            staking_info.lock_period[index],
+            staking_info.reward_rate[index],
+            user_stake_info.pending_reward[index],
+        );
+        let staked_amount = user_stake_info.amount[index];
+
+        if ctx.accounts.reward_token_vaults.amount < reward_amount {
+            return err!(StakingError::InsufficientBalance);
+        }
+
+        staking_info.total_staked -= user_stake_info.amount[index];
+
+        user_stake_info.amount[index] = 0;
+        user_stake_info.claimed_amount[index] += reward_amount;
+        user_stake_info.claimed_time[index] = cur_time;
+
+}
 
 #[derive(Accounts)]
 pub struct Initialize<'info> {
