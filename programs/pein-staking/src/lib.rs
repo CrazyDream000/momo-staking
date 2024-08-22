@@ -224,7 +224,23 @@ pub struct Initialize<'info> {
     #[account(init, payer = signer, seeds = [b"reward_token_vaults", reward_token_mint.key().as_ref()], bump, token::mint = reward_token_mint, token::authority = reward_token_vaults)]
     pub reward_token_vaults: Account<'info, TokenAccount>,
     #[account(mut)]
-    pub signer: Signe
+    pub signer: Signer<'info>,
+
+    pub token_program: Program<'info, Token>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct WithdrawRewardtoken<'info> {
+    #[account(mut, seeds = [b"staking_info"], bump = staking_info.bump)]
+    pub staking_info: Account<'info, StakingInfo>,
+    #[account(mut)]
+    pub reward_token_mint: Account<'info, Mint>,
+    #[account(mut, seeds = [b"reward_token_vaults", reward_token_mint.key().as_ref()], bump = staking_info.reward_vaults_bump)]
+    pub reward_token_vaults: Account<'info, TokenAccount>,
+
+    #[account(mut, token::mint = staking_info.reward_token_mint)]
+    pub recipient_token: Account<'info, TokenAccount>,
 
     #[account(mut)]
     pub signer: Signer<'info>,
