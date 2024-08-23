@@ -285,7 +285,18 @@ pub struct Unstake<'info> {
     pub staking_info: Account<'info, StakingInfo>,
     #[account(mut, seeds = [b"user_stake_info", signer.key().as_ref()], bump)]
     pub user_stake_info: Account<'info, UserStakeInfo>,
-
+    #[account(mut)]
+    pub staking_token_mint: Account<'info, Mint>,
+    #[account(mut)]
+    pub reward_token_mint: Account<'info, Mint>,
+    #[account(mut, seeds = [b"staking_token_vaults", staking_token_mint.key().as_ref()], bump = staking_info.staking_vaults_bump)]
+    pub staking_token_vaults: Account<'info, TokenAccount>,
+    #[account(mut, seeds = [b"reward_token_vaults", reward_token_mint.key().as_ref()], bump = staking_info.reward_vaults_bump)]
+    pub reward_token_vaults: Account<'info, TokenAccount>,
+    #[account(mut, token::mint = staking_info.staking_token_mint, token::authority = signer.key())]
+    pub recipient_staking_token: Account<'info, TokenAccount>,
+    #[account(mut, token::mint = staking_info.reward_token_mint, token::authority = signer.key())]
+    pub recipient_reward_token: Account<'info, TokenAccount>,
 
     #[account(mut)]
     pub signer: Signer<'info>,
