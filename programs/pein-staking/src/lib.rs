@@ -270,13 +270,7 @@ pub struct Stake<'info> {
     #[account(mut, seeds = [b"staking_info"], bump = staking_info.bump)]
     pub staking_info: Account<'info, StakingInfo>,
     #[account(init_if_needed, payer = signer, seeds = [b"user_stake_info", signer.key().as_ref()], bump, space = 8 + UserStakeInfo::MAX_SIZE)]
-    pub user_stake_info: Account<'info, UserStakeInfo>,
-    #[account(mut)]
-    pub staking_token_mint: Account<'info, Mint>,
-    #[account(mut, seeds = [b"staking_token_vaults", staking_token_mint.key().as_ref()], bump = staking_info.staking_vaults_bump)]
-    pub staking_token_vaults: Account<'info, TokenAccount>,
-    #[account(mut, token::mint = staking_info.staking_token_mint, token::authority = signer.key())]
-    pub sender_token: Account<'info, TokenAccount>,
+
 
     #[account(mut)]
     pub signer: Signer<'info>,
@@ -291,18 +285,7 @@ pub struct Unstake<'info> {
     pub staking_info: Account<'info, StakingInfo>,
     #[account(mut, seeds = [b"user_stake_info", signer.key().as_ref()], bump)]
     pub user_stake_info: Account<'info, UserStakeInfo>,
-    #[account(mut)]
-    pub staking_token_mint: Account<'info, Mint>,
-    #[account(mut)]
-    pub reward_token_mint: Account<'info, Mint>,
-    #[account(mut, seeds = [b"staking_token_vaults", staking_token_mint.key().as_ref()], bump = staking_info.staking_vaults_bump)]
-    pub staking_token_vaults: Account<'info, TokenAccount>,
-    #[account(mut, seeds = [b"reward_token_vaults", reward_token_mint.key().as_ref()], bump = staking_info.reward_vaults_bump)]
-    pub reward_token_vaults: Account<'info, TokenAccount>,
-    #[account(mut, token::mint = staking_info.staking_token_mint, token::authority = signer.key())]
-    pub recipient_staking_token: Account<'info, TokenAccount>,
-    #[account(mut, token::mint = staking_info.reward_token_mint, token::authority = signer.key())]
-    pub recipient_reward_token: Account<'info, TokenAccount>,
+
 
     #[account(mut)]
     pub signer: Signer<'info>,
@@ -315,14 +298,7 @@ pub struct Unstake<'info> {
 pub struct StakingInfo {
     pub lock_period: [u64; 4],
     pub reward_rate: [u64; 4],
-    pub staking_token_mint: Pubkey,
-    pub reward_token_mint: Pubkey,
-    pub owner: Pubkey,
-    pub total_staked: u64,
 
-    bump: u8,
-    staking_vaults_bump: u8,
-    reward_vaults_bump: u8,
 }
 
 impl StakingInfo {
