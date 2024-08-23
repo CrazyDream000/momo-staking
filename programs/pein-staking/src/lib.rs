@@ -298,7 +298,14 @@ pub struct Unstake<'info> {
 pub struct StakingInfo {
     pub lock_period: [u64; 4],
     pub reward_rate: [u64; 4],
+    pub staking_token_mint: Pubkey,
+    pub reward_token_mint: Pubkey,
+    pub owner: Pubkey,
+    pub total_staked: u64,
 
+    bump: u8,
+    staking_vaults_bump: u8,
+    reward_vaults_bump: u8,
 }
 
 impl StakingInfo {
