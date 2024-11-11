@@ -329,4 +329,13 @@ impl StakingInfo {
     pub const MAX_SIZE: usize = 8 * 4 + 8 * 4 + 32 + 32 + 32 + 8 + 1 + 1 + 1;
 }
 
+#[account]
+pub struct UserStakeInfo {
+    pub amount: [u64; 4],
+    pub staked_time: [u64; 4],
+    pub claimed_time: [u64; 4],
+    pub claimed_amount: [u64; 4],
+    pub pending_reward: [u64; 4],
+}
+
 
