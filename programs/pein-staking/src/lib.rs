@@ -325,29 +325,4 @@ pub struct StakingInfo {
     reward_vaults_bump: u8,
 }
 
-impl StakingInfo {
-    pub const MAX_SIZE: usize = 8 * 4 + 8 * 4 + 32 + 32 + 32 + 8 + 1 + 1 + 1;
-}
 
-#[account]
-pub struct UserStakeInfo {
-    pub amount: [u64; 4],
-    pub staked_time: [u64; 4],
-    pub claimed_time: [u64; 4],
-    pub claimed_amount: [u64; 4],
-    pub pending_reward: [u64; 4],
-}
-
-impl UserStakeInfo {
-    pub const MAX_SIZE: usize = 8 * 4 * 5;
-}
-
-#[error_code]
-pub enum StakingError {
-    #[msg("NOT_OWNER")]
-    NotOwner,
-    #[msg("INSUFFICIENT BALANCE")]
-    InsufficientBalance,
-    #[msg("IN LOCK PERIOD")]
-    Locked,
-}
