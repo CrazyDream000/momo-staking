@@ -342,3 +342,12 @@ impl UserStakeInfo {
     pub const MAX_SIZE: usize = 8 * 4 * 5;
 }
 
+#[error_code]
+pub enum StakingError {
+    #[msg("NOT_OWNER")]
+    NotOwner,
+    #[msg("INSUFFICIENT BALANCE")]
+    InsufficientBalance,
+    #[msg("IN LOCK PERIOD")]
+    Locked,
+}
