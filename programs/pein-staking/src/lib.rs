@@ -325,4 +325,8 @@ pub struct StakingInfo {
     reward_vaults_bump: u8,
 }
 
+impl StakingInfo {
+    pub const MAX_SIZE: usize = 8 * 4 + 8 * 4 + 32 + 32 + 32 + 8 + 1 + 1 + 1;
+}
+
 
