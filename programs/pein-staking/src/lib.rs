@@ -338,4 +338,7 @@ pub struct UserStakeInfo {
     pub pending_reward: [u64; 4],
 }
 
+impl UserStakeInfo {
+    pub const MAX_SIZE: usize = 8 * 4 * 5;
+}
 
